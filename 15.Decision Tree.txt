@@ -1,0 +1,31 @@
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.tree import DecisionTreeClassifier, plot_tree, export_text
+from sklearn.model_selection import train_test_split
+
+# Sample temperature dataset (Temperature in Celsius and Classification)
+data = np.array([
+    [0, "Cold"], [5, "Cold"], [10, "Cold"], [15, "Warm"], [20, "Warm"], 
+    [25, "Warm"], [30, "Hot"], [35, "Hot"], [40, "Hot"]
+])
+
+# Prepare features and labels
+X = data[:, 0].astype(float).reshape(-1, 1)  # Temperature values
+y = data[:, 1]  # Labels
+
+# Convert labels to numerical values
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+y_encoded = le.fit_transform(y)
+
+# Train Decision Tree classifier
+dt = DecisionTreeClassifier(max_depth=3, random_state=42)
+dt.fit(X, y_encoded)
+
+# Plot decision tree
+plt.figure(figsize=(10, 6))
+plot_tree(dt, feature_names=["Temperature"], class_names=le.classes_, filled=True)
+plt.show()
+
+# Print textual representation
+print(export_text(dt, feature_names=["Temperature"]))
